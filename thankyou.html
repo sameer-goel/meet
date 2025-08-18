@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(ellipse at center, #1a1a2e, #16213e, #0f3460);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(52, 152, 219, 0.6);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 70%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 80%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 90%; animation-delay: 5s; }
+
+        .container {
+            text-align: center;
+            color: #ecf0f1;
+            z-index: 2;
+            position: relative;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .thank-you-message {
+            margin-bottom: 40px;
+            animation: slideDown 1.5s ease-out;
+        }
+
+        .main-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(48px, 8vw, 72px);
+            color: #2ecc71;
+            text-shadow: 0 0 30px rgba(46, 204, 113, 0.8);
+            margin-bottom: 15px;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        .subtitle {
+            font-size: clamp(18px, 4vw, 28px);
+            color: #bdc3c7;
+            font-weight: 300;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeInUp 2s ease-out 0.5s forwards;
+        }
+
+        .signature-center {
+            font-family: 'Dancing Script', cursive;
+            font-size: 18px;
+            color: #95a5a6;
+            margin-top: 40px;
+            transform: rotate(-1deg);
+            animation: handwriting 1s ease-out 1s forwards;
+            background: linear-gradient(to right, #95a5a6 0%, #95a5a6 50%, transparent 50%);
+            background-size: 200% 100%;
+            background-position: 100% 0;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .signature-name {
+            font-family: 'Dancing Script', cursive;
+            font-size: 26px;
+            color: #95a5a6;
+            margin-top: 15px;
+            transform: rotate(-1deg);
+            animation: handwriting 3s ease-out 2.5s forwards;
+            background: linear-gradient(to right, #95a5a6 0%, #95a5a6 50%, transparent 50%);
+            background-size: 200% 100%;
+            background-position: 100% 0;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .date {
+            font-family: 'Dancing Script', cursive;
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-top: 20px;
+            transform: rotate(-1deg);
+            opacity: 0;
+            animation: fadeInUp 2s ease-out 2.5s forwards;
+        }
+
+        .upgrade-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 40px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 3s forwards;
+        }
+
+        .upgrade-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 30px rgba(46, 204, 113, 0.8); }
+            to { text-shadow: 0 0 40px rgba(46, 204, 113, 1), 0 0 60px rgba(46, 204, 113, 0.6); }
+        }
+
+        @keyframes handwriting {
+            0% {
+                background-position: 100% 0;
+            }
+            100% {
+                background-position: 0% 0;
+            }
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container">
+        <div class="thank-you-message">
+            <h1 class="main-title">Thank You <span id="user-name"></span></h1>
+            <p class="subtitle">Looking forward to collaborating with you in Meaningful ways</p>
+            <div class="signature-center">Crafted with Innovation and Creativity</div>
+            <div class="date" id="current-date"></div>
+            <div class="signature-name">Sameer Goel</div>
+            <button class="upgrade-button" onclick="window.open('https://updatemind.space/', '_blank')">Let's upgrade superpowers</button>
+        </div>
+    </div>
+
+
+
+    <script>
+        // Get name from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const userName = urlParams.get('name');
+        if (userName) {
+            document.getElementById('user-name').textContent = userName;
+        }
+
+        // Set current date
+        const currentDate = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        document.getElementById('current-date').textContent = currentDate;
+    </script>
+</body>
+</html>

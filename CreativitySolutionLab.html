@@ -437,7 +437,11 @@
         tube.addEventListener('mousedown', handleTubeClick);
         tube.addEventListener('touchstart', handleTubeClick);
     });
-    unmuteButton.addEventListener('click', resetGame);
+    unmuteButton.addEventListener('click', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const playerName = urlParams.get('name') || 'Friend';
+        window.location.href = `thankyou.html?name=${playerName}`;
+    });
 
     // UPDATED: Copy from the span's text content
     copyCodeBtn.addEventListener('click', () => {
