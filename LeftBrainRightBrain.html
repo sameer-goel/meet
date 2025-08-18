@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Classic Balance Scale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.5s ease-in-out;
+        }
+        #scene-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+        #scene-container:grabbing {
+            cursor: grabbing;
+        }
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allow clicks to pass through to the canvas */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            z-index: 10;
+        }
+        .ui-overlay button {
+            pointer-events: all; /* Make buttons clickable */
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-disabled {
+            background-color: #d1d5db !important; /* Tailwind's gray-300 */
+            color: #6b7280 !important; /* Tailwind's gray-500 */
+            cursor: not-allowed !important;
+            transform: scale(1) !important;
+            box-shadow: none !important;
+        }
+        .info-container {
+            background: linear-gradient(145deg, #f0f0f0, #cacaca);
+            border-radius: 15px;
+            padding: 20px 30px;
+            box-shadow: 
+                20px 20px 40px #bebebe,
+                -20px -20px 40px #ffffff,
+                inset 5px 5px 10px #d1d1d1,
+                inset -5px -5px 10px #ffffff;
+            transform: perspective(1000px) rotateX(5deg);
+            transition: all 0.3s ease;
+            pointer-events: all;
+            min-width: 300px;
+            text-align: center;
+        }
+        .info-container:hover {
+            transform: perspective(1000px) rotateX(0deg) translateY(-2px);
+            box-shadow: 
+                25px 25px 50px #bebebe,
+                -25px -25px 50px #ffffff,
+                inset 3px 3px 8px #d1d1d1,
+                inset -3px -3px 8px #ffffff;
+        }
+        .explore-icon {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            pointer-events: all;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .explore-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 transition-colors duration-500">
+
+    <!-- Container for the 3D scene -->
+    <div id="scene-container"></div>
+    
+    <!-- Explore Icon -->
+    <a href="https://www.sameerai.com" target="_blank" class="explore-icon">
+        <span>🧠</span>
+        <span>Explore digital consciousness</span>
+    </a>
+
+    <!-- UI Overlay for text and buttons -->
+    <div class="ui-overlay">
+        <!-- Top Section -->
+        <div class="flex flex-col items-center gap-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Mental Balance 🧠</h1>
+            <!-- Counters above the scale -->
+            <div class="flex w-full max-w-md justify-between text-2xl font-bold">
+                <p>Logic: <span id="left-count">0</span></p>
+                <p>Emotion: <span id="right-count">0</span></p>
+            </div>
+        </div>
+
+        <!-- Bottom Section with Info Container and Controls -->
+        <div class="flex flex-col items-center gap-6">
+            <!-- 3D Container for Info Text -->
+            <div class="info-container">
+                <p id="info-text" class="text-lg font-semibold transition-all duration-300">Add weight to find the balance.</p>
+            </div>
+            
+            <!-- Controls -->
+            <div class="flex items-center gap-8 md:gap-16">
+                <button id="add-left" class="px-6 py-3 bg-yellow-400 text-gray-900 font-semibold rounded-lg shadow-lg hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105">Logic Approach</button>
+                <button id="reset-button" class="px-5 py-2 bg-gray-500 text-white font-semibold rounded-full shadow-md hover:bg-gray-600 transition-all duration-300">Reset</button>
+                <button id="add-right" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-105">Emotion Approach</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script type="module">
+        // --- SCENE SETUP ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xa0a0a0);
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 6, 15);
+        camera.lookAt(0, 3, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Add soft shadows for a more natural look
+        document.getElementById('scene-container').appendChild(renderer.domElement);
+        
+        // --- UI ELEMENTS ---
+        const body = document.body;
+        const infoText = document.getElementById('info-text');
+        const leftCountText = document.getElementById('left-count');
+        const rightCountText = document.getElementById('right-count');
+        const addLeftButton = document.getElementById('add-left');
+        const addRightButton = document.getElementById('add-right');
+
+        // --- LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.9);
+        directionalLight.position.set(10, 20, 10);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+
+        // Improved shadow properties for better accuracy and look
+        directionalLight.shadow.mapSize.width = 2048; // Increase shadow map resolution
+        directionalLight.shadow.mapSize.height = 2048; // Increase shadow map resolution
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 50;
+        directionalLight.shadow.camera.left = -10;
+        directionalLight.shadow.camera.right = 10;
+        directionalLight.shadow.camera.top = 10;
+        directionalLight.shadow.camera.bottom = -10;
+        directionalLight.shadow.bias = -0.0001; // Prevents "shadow acne" artifacts
+        directionalLight.shadow.normalBias = 0.001; // Another artifact fix
+
+        const hemisphereLight = new THREE.HemisphereLight(0x443333, 0x111122, 1);
+        scene.add(hemisphereLight);
+
+        // --- 3D OBJECTS ---
+        const goldMaterial = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.8, roughness: 0.2 });
+
+        // Ground
+        const groundMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(100, 100),
+            new THREE.MeshStandardMaterial({ color: 0xdddddd })
+        );
+        groundMesh.rotation.x = -Math.PI / 2;
+        groundMesh.receiveShadow = true;
+        scene.add(groundMesh);
+
+        // Scale Stand (Static)
+        const standMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 1.5, 5, 32), goldMaterial);
+        standMesh.position.y = 2.5;
+        standMesh.castShadow = true;
+        scene.add(standMesh);
+        
+        // Group for the beam and its weights to pivot together
+        const balanceGroup = new THREE.Group();
+        balanceGroup.position.y = 5;
+        scene.add(balanceGroup);
+
+        // Balance Beam
+        const beamMesh = new THREE.Mesh(new THREE.BoxGeometry(12, 0.2, 0.2), goldMaterial);
+        beamMesh.castShadow = true;
+        balanceGroup.add(beamMesh);
+
+        // Left and Right Bowls
+        const bowlGeometry = new THREE.CylinderGeometry(2, 1.5, 0.5, 32);
+        const bowlMaterial = new THREE.MeshStandardMaterial({ color: 0xcd7f32, metalness: 0.5, roughness: 0.5 }); // Bronze-like color
+        const leftBowl = new THREE.Mesh(bowlGeometry, bowlMaterial);
+        const rightBowl = new THREE.Mesh(bowlGeometry, bowlMaterial);
+
+        leftBowl.position.set(-4, -0.25, 0);
+        leftBowl.castShadow = true;
+        leftBowl.receiveShadow = true;
+        balanceGroup.add(leftBowl);
+
+        rightBowl.position.set(4, -0.25, 0);
+        rightBowl.castShadow = true;
+        rightBowl.receiveShadow = true;
+        balanceGroup.add(rightBowl);
+        
+        // --- WEIGHT LOGIC & GAME STATES ---
+        let leftWeightCount = 0;
+        let rightWeightCount = 0;
+        const weightBlocks = [];
+        const IMBALANCE_THRESHOLD = 1;
+        let particles = null;
+
+        function addWeight(side) {
+            const difference = leftWeightCount - rightWeightCount;
+            const isStuckInLogic = difference > IMBALANCE_THRESHOLD;
+            const isStuckInEmotion = difference < -IMBALANCE_THRESHOLD;
+            
+            let weightToAdd = 1;
+            
+            if (side === 'left') {
+                if (isStuckInLogic) {
+                    infoText.textContent = "You are stuck in logic. Try adding emotion!";
+                    return;
+                }
+                if (isStuckInEmotion) {
+                    weightToAdd = 3;
+                    infoText.textContent = "Logic brings clarity! (+3)";
+                }
+                leftWeightCount += weightToAdd;
+            } else { // side === 'right'
+                if (isStuckInEmotion) {
+                    infoText.textContent = "You are overwhelmed by emotion. It's time to add some logic!";
+                    return;
+                }
+                if (isStuckInLogic) {
+                    weightToAdd = 3;
+                    infoText.textContent = "Emotion adds flexibility! (+3)";
+                }
+                rightWeightCount += weightToAdd;
+            }
+            
+            for (let i = 0; i < weightToAdd; i++) {
+                const positionX = (side === 'left' ? -4 : 4);
+                const weightCount = (side === 'left' ? leftWeightCount - (weightToAdd - i) : rightWeightCount - (weightToAdd - i));
+                const blockMesh = new THREE.Mesh(
+                    new THREE.BoxGeometry(1.5, 0.2, 0.2),
+                    goldMaterial
+                );
+                blockMesh.position.set(positionX, 0.1 + (weightCount * 0.2), 0);
+                blockMesh.castShadow = true;
+                balanceGroup.add(blockMesh);
+                weightBlocks.push(blockMesh);
+            }
+            
+            checkBalanceState();
+        }
+
+        function createParticles() {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+            const sizes = [];
+
+            for (let i = 0; i < 500; i++) {
+                vertices.push(
+                    (Math.random() - 0.5) * 0.5, // x
+                    (Math.random() - 0.5) * 0.5, // y
+                    (Math.random() - 0.5) * 0.5  // z
+                );
+                const color = new THREE.Color(0xfff8e1); // Light yellow/gold
+                colors.push(color.r, color.g, color.b);
+                sizes.push(1); // Initial size
+            }
+            
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
+            
+            const material = new THREE.PointsMaterial({
+                size: 0.1,
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 1
+            });
+            
+            particles = new THREE.Points(geometry, material);
+            balanceGroup.add(particles);
+        }
+
+        function updateParticles() {
+            if (!particles) return;
+
+            const positions = particles.geometry.attributes.position.array;
+            const sizes = particles.geometry.attributes.size.array;
+            const opacities = particles.material.opacity;
+            
+            for (let i = 0; i < positions.length / 3; i++) {
+                // Move particles upwards and outward
+                positions[i * 3 + 1] += 0.005;
+                positions[i * 3] += (Math.random() - 0.5) * 0.005;
+                positions[i * 3 + 2] += (Math.random() - 0.5) * 0.005;
+                
+                // Fade particles out over time
+                if (sizes[i] > 0.01) {
+                    sizes[i] -= 0.001;
+                }
+            }
+            
+            particles.geometry.attributes.position.needsUpdate = true;
+            particles.geometry.attributes.size.needsUpdate = true;
+            
+            if (opacities > 0) {
+                 particles.material.opacity -= 0.005;
+            }
+        }
+
+
+        // --- ANIMATION & GAME STATE LOGIC ---
+        let targetAngle = 0;
+        let currentAngle = 0;
+        let velocity = 0;
+        const stiffness = 0.03; // How strong the spring is
+        const damping = 0.2;   // How much friction is applied to stop the oscillation
+
+        function checkBalanceState() {
+            leftCountText.textContent = leftWeightCount;
+            rightCountText.textContent = rightWeightCount;
+            const difference = leftWeightCount - rightWeightCount;
+            
+            targetAngle = difference * 5 * (Math.PI / 180);
+
+            addLeftButton.disabled = false;
+            addRightButton.disabled = false;
+            addLeftButton.classList.remove('btn-disabled');
+            addRightButton.classList.remove('btn-disabled');
+
+            if (particles) {
+                balanceGroup.remove(particles);
+                particles.geometry.dispose();
+                particles.material.dispose();
+                particles = null;
+            }
+            body.classList.remove('bg-green-100');
+            
+            if (difference === 0 && (leftWeightCount > 0 || rightWeightCount > 0)) {
+                infoText.textContent = "Perfectly Balanced! 🎉";
+                infoText.style.color = '#10B981';
+                createParticles();
+                body.classList.add('bg-green-100');
+            } else if (difference > IMBALANCE_THRESHOLD) {
+                infoText.textContent = "Stuck in logic. Try adding emotion!";
+                infoText.style.color = '#B91C1C';
+                addLeftButton.disabled = true;
+                addLeftButton.classList.add('btn-disabled');
+            } else if (difference < -IMBALANCE_THRESHOLD) {
+                infoText.textContent = "Overwhelmed by emotion. It's time to add some logic!";
+                infoText.style.color = '#B91C1C';
+                addRightButton.disabled = true;
+                addRightButton.classList.add('btn-disabled');
+            } else if (difference > 0) {
+                infoText.textContent = "Leaning towards Logic...";
+                infoText.style.color = '#F59E0B';
+            } else if (difference < 0) {
+                infoText.textContent = "Leaning towards Emotion...";
+                infoText.style.color = '#3B82F6';
+            } else {
+                infoText.textContent = "Add weight to find the balance.";
+                infoText.style.color = '#4B5563';
+            }
+        }
+        
+        // --- RESET FUNCTIONALITY ---
+        function resetScene() {
+            weightBlocks.forEach(block => balanceGroup.remove(block));
+            weightBlocks.length = 0;
+
+            leftWeightCount = 0;
+            rightWeightCount = 0;
+            targetAngle = 0; 
+            
+            if (particles) {
+                balanceGroup.remove(particles);
+                particles.geometry.dispose();
+                particles.material.dispose();
+                particles = null;
+            }
+            body.classList.remove('bg-green-100');
+            
+            checkBalanceState();
+        }
+
+        // --- EVENT LISTENERS FOR BUTTONS ---
+        document.getElementById('add-left').addEventListener('click', () => addWeight('left'));
+        document.getElementById('add-right').addEventListener('click', () => addWeight('right'));
+        document.getElementById('reset-button').addEventListener('click', resetScene);
+
+        // --- MOUSE CONTROLS ---
+        let isMouseDown = false;
+        let previousMousePosition = { x: 0, y: 0 };
+
+        document.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+            document.getElementById('scene-container').style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mouseup', () => {
+            isMouseDown = false;
+            document.getElementById('scene-container').style.cursor = 'grab';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isMouseDown) return;
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+
+            const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), deltaX * 0.005);
+            camera.position.applyQuaternion(rotationQuaternion);
+            
+            const verticalRotationQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), deltaY * 0.005);
+            const currentAngle = camera.position.clone().angleTo(new THREE.Vector3(0,1,0));
+            if ((deltaY > 0 && currentAngle < Math.PI - 0.2) || (deltaY < 0 && currentAngle > 0.2)) {
+                 camera.position.applyQuaternion(verticalRotationQuaternion);
+            }
+            camera.lookAt(0, 3, 0);
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        // --- ANIMATION LOOP ---
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const force = (targetAngle - currentAngle) * stiffness;
+            velocity += force;
+            velocity *= (1 - damping);
+            currentAngle += velocity;
+
+            balanceGroup.rotation.z = currentAngle;
+            
+            // Only update particles if they exist
+            if (particles) {
+                updateParticles();
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // --- RESIZE HANDLER ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
