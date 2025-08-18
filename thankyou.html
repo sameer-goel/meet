@@ -207,7 +207,7 @@
             <div class="signature-center">Crafted with Innovation and Creativity</div>
             <div class="signature-name">Sameer Goel</div>
             <div class="date" id="current-date"></div>
-            <button class="upgrade-button" onclick="window.open('https://updatemind.space/', '_blank')">Let's upgrade superpowers</button>
+            <button class="upgrade-button" id="action-button">Let's upgrade superpowers</button>
         </div>
     </div>
 
@@ -228,6 +228,15 @@
             day: 'numeric'
         });
         document.getElementById('current-date').textContent = currentDate;
+        
+        // Set button text and action based on user
+        const actionButton = document.getElementById('action-button');
+        if (userName === 'Falco') {
+            actionButton.textContent = 'Explore Digital Consciousness';
+            actionButton.onclick = () => window.open('https://www.sameerai.com', '_blank');
+        } else {
+            actionButton.onclick = () => window.open('https://updatemind.space/', '_blank');
+        }
     </script>
 </body>
 </html>

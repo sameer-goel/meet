@@ -51,27 +51,64 @@
             box-shadow: none !important;
         }
         .info-container {
-            background: linear-gradient(145deg, #f0f0f0, #cacaca);
-            border-radius: 15px;
-            padding: 20px 30px;
+            background: linear-gradient(145deg, #1f2937, #374151);
+            border-radius: 20px;
+            padding: 25px 35px;
             box-shadow: 
-                20px 20px 40px #bebebe,
-                -20px -20px 40px #ffffff,
-                inset 5px 5px 10px #d1d1d1,
-                inset -5px -5px 10px #ffffff;
+                0 25px 50px rgba(0,0,0,0.3),
+                0 10px 20px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,255,255,0.1),
+                inset 0 -1px 0 rgba(0,0,0,0.2);
             transform: perspective(1000px) rotateX(5deg);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: all;
-            min-width: 300px;
+            min-width: 400px;
             text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
         .info-container:hover {
-            transform: perspective(1000px) rotateX(0deg) translateY(-2px);
+            transform: perspective(1000px) rotateX(0deg) translateY(-5px);
             box-shadow: 
-                25px 25px 50px #bebebe,
-                -25px -25px 50px #ffffff,
-                inset 3px 3px 8px #d1d1d1,
-                inset -3px -3px 8px #ffffff;
+                0 35px 70px rgba(0,0,0,0.4),
+                0 15px 30px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2),
+                inset 0 -1px 0 rgba(0,0,0,0.3);
+        }
+        .result-display {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .balance-meter {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .balance-fill {
+            height: 100%;
+            transition: all 0.5s ease;
+            border-radius: 4px;
+        }
+        .result-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 10px;
         }
         .explore-icon {
             position: fixed;
@@ -116,6 +153,120 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
         }
+        .title-standard {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            font-weight: 600;
+            color: #374151;
+            z-index: 1000;
+            pointer-events: all;
+        }
+        .subtitle {
+            position: fixed;
+            top: 60px;
+            left: 20px;
+            font-size: clamp(0.75rem, 2vw, 1rem);
+            font-weight: 400;
+            color: #6B7280;
+            z-index: 1000;
+            pointer-events: all;
+            margin: 0;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background: linear-gradient(145deg, #1f2937, #374151);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 90%;
+        }
+        .code-container {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .code-label {
+            font-size: 14px;
+            color: #9CA3AF;
+            margin-bottom: 10px;
+        }
+        .code-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .code-display span {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: #10B981;
+        }
+        .code-display button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .code-display button:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        #copy-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #10B981;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 3000;
+        }
+        #copy-popup.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes float-3d {
+            0%, 100% { transform: perspective(500px) rotateX(15deg) translateY(0px); }
+            50% { transform: perspective(500px) rotateX(15deg) translateY(-5px); }
+        }
     </style>
 </head>
 <body class="bg-gray-100 transition-colors duration-500">
@@ -123,43 +274,48 @@
     <!-- Container for the 3D scene -->
     <div id="scene-container"></div>
     
-    <!-- Explore Icon -->
-    <a href="https://www.sameerai.com" target="_blank" class="explore-icon">
-        <span>🧠</span>
-        <span>Explore digital consciousness</span>
-    </a>
-    
-    <!-- Thank You Button -->
-    <a href="thankyou.html" class="thank-you-btn">
-        <span>🙏</span>
-        <span>Thank You</span>
-    </a>
 
+
+    <!-- Title Logo -->
+    <h1 class="title-standard">Mental Balance 🧠</h1>
+    <p class="subtitle">Finding mental balance is a key to living</p>
+    
+    <!-- Completion Modal -->
+    <div id="completion-modal" class="modal-overlay">
+        <div class="modal-content">
+            <p>You have successfully found the mental balance! 🧠</p>
+            <div class="code-container">
+                <div class="code-label">Code</div>
+                <div class="code-display">
+                    <span id="code-text">19 13 09 12 05</span>
+                    <button id="copy-code-btn">📋</button>
+                </div>
+            </div>
+            <button id="unmute-button" class="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-lg hover:bg-green-700 transition-all duration-300">Unvisible Sameer</button>
+            <div id="copy-popup">Copied to clipboard!</div>
+        </div>
+    </div>
+    
     <!-- UI Overlay for text and buttons -->
     <div class="ui-overlay">
-        <!-- Top Section -->
-        <div class="flex flex-col items-center gap-4">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Mental Balance 🧠</h1>
-            <!-- Counters above the scale -->
-            <div class="flex w-full max-w-md justify-between text-2xl font-bold">
-                <p>Logic: <span id="left-count">0</span></p>
-                <p>Emotion: <span id="right-count">0</span></p>
+        <!-- Center Section with Result Display -->
+        <div class="flex justify-center items-center">
+            <div class="info-container">
+                <p id="info-text" class="text-lg font-semibold transition-all duration-300"></p>
             </div>
         </div>
 
-        <!-- Bottom Section with Info Container and Controls -->
-        <div class="flex flex-col items-center gap-6">
-            <!-- 3D Container for Info Text -->
-            <div class="info-container">
-                <p id="info-text" class="text-lg font-semibold transition-all duration-300">Add weight to find the balance.</p>
-            </div>
-            
-            <!-- Controls -->
-            <div class="flex items-center gap-8 md:gap-16">
-                <button id="add-left" class="px-6 py-3 bg-yellow-400 text-gray-900 font-semibold rounded-lg shadow-lg hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105">Logic Approach</button>
-                <button id="reset-button" class="px-5 py-2 bg-gray-500 text-white font-semibold rounded-full shadow-md hover:bg-gray-600 transition-all duration-300">Reset</button>
-                <button id="add-right" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-105">Emotion Approach</button>
-            </div>
+        <!-- Bottom Section with Controls -->
+        <div class="flex items-center gap-8 md:gap-16">
+            <button id="add-left" class="px-6 py-3 bg-yellow-400 text-gray-900 font-semibold rounded-lg shadow-lg hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105">+ Logical Approach</button>
+            <button id="reset-button" class="px-5 py-2 bg-gray-500 text-white font-semibold rounded-full shadow-md hover:bg-gray-600 transition-all duration-300">Reset</button>
+            <button id="add-right" class="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-105">+ Emotional Approach</button>
+        </div>
+        
+        <!-- Hidden counters for JavaScript -->
+        <div style="display: none;">
+            <span id="left-count">0</span>
+            <span id="right-count">0</span>
         </div>
     </div>
 
@@ -263,48 +419,45 @@
         const weightBlocks = [];
         const IMBALANCE_THRESHOLD = 1;
         let particles = null;
+        let balanceCount = 0;
+        const REQUIRED_BALANCES = 3;
+        
+        // Modal elements
+        const modal = document.getElementById('completion-modal');
+        const unmuteButton = document.getElementById('unmute-button');
+        const codeText = document.getElementById('code-text');
+        const copyCodeBtn = document.getElementById('copy-code-btn');
+        const copyPopup = document.getElementById('copy-popup');
 
         function addWeight(side) {
             const difference = leftWeightCount - rightWeightCount;
             const isStuckInLogic = difference > IMBALANCE_THRESHOLD;
             const isStuckInEmotion = difference < -IMBALANCE_THRESHOLD;
             
-            let weightToAdd = 1;
-            
             if (side === 'left') {
                 if (isStuckInLogic) {
                     infoText.textContent = "You are stuck in logic. Try adding emotion!";
                     return;
                 }
-                if (isStuckInEmotion) {
-                    weightToAdd = 3;
-                    infoText.textContent = "Logic brings clarity! (+3)";
-                }
-                leftWeightCount += weightToAdd;
+                leftWeightCount += 1;
             } else { // side === 'right'
                 if (isStuckInEmotion) {
                     infoText.textContent = "You are overwhelmed by emotion. It's time to add some logic!";
                     return;
                 }
-                if (isStuckInLogic) {
-                    weightToAdd = 3;
-                    infoText.textContent = "Emotion adds flexibility! (+3)";
-                }
-                rightWeightCount += weightToAdd;
+                rightWeightCount += 1;
             }
             
-            for (let i = 0; i < weightToAdd; i++) {
-                const positionX = (side === 'left' ? -4 : 4);
-                const weightCount = (side === 'left' ? leftWeightCount - (weightToAdd - i) : rightWeightCount - (weightToAdd - i));
-                const blockMesh = new THREE.Mesh(
-                    new THREE.BoxGeometry(1.5, 0.2, 0.2),
-                    goldMaterial
-                );
-                blockMesh.position.set(positionX, 0.1 + (weightCount * 0.2), 0);
-                blockMesh.castShadow = true;
-                balanceGroup.add(blockMesh);
-                weightBlocks.push(blockMesh);
-            }
+            const positionX = (side === 'left' ? -4 : 4);
+            const weightCount = (side === 'left' ? leftWeightCount : rightWeightCount);
+            const blockMesh = new THREE.Mesh(
+                new THREE.BoxGeometry(1.5, 0.2, 0.2),
+                goldMaterial
+            );
+            blockMesh.position.set(positionX, 0.1 + (weightCount * 0.2), 0);
+            blockMesh.castShadow = true;
+            balanceGroup.add(blockMesh);
+            weightBlocks.push(blockMesh);
             
             checkBalanceState();
         }
@@ -381,6 +534,7 @@
             leftCountText.textContent = leftWeightCount;
             rightCountText.textContent = rightWeightCount;
             const difference = leftWeightCount - rightWeightCount;
+            const total = leftWeightCount + rightWeightCount;
             
             targetAngle = difference * 5 * (Math.PI / 180);
 
@@ -397,31 +551,72 @@
             }
             body.classList.remove('bg-green-100');
             
-            if (difference === 0 && (leftWeightCount > 0 || rightWeightCount > 0)) {
-                infoText.textContent = "Perfectly Balanced! 🎉";
-                infoText.style.color = '#10B981';
+            // Calculate balance percentage
+            const balancePercentage = total > 0 ? Math.max(0, 100 - Math.abs(difference) * 25) : 0;
+            
+            let statusIcon, statusText, statusColor, meterColor;
+            
+            if (difference === 0 && total > 0) {
+                statusIcon = '✅';
+                statusText = 'Perfect Balance Achieved';
+                statusColor = '#10B981';
+                meterColor = 'linear-gradient(90deg, #10B981, #34D399)';
                 createParticles();
                 body.classList.add('bg-green-100');
+                
+                // Increment balance count
+                balanceCount++;
+                if (balanceCount >= REQUIRED_BALANCES) {
+                    setTimeout(() => {
+                        modal.classList.add('visible');
+                    }, 1000);
+                }
             } else if (difference > IMBALANCE_THRESHOLD) {
-                infoText.textContent = "Stuck in logic. Try adding emotion!";
-                infoText.style.color = '#B91C1C';
+                statusIcon = '⚠️';
+                statusText = 'Logic Overload - Add Emotion';
+                statusColor = '#EF4444';
+                meterColor = 'linear-gradient(90deg, #EF4444, #F87171)';
                 addLeftButton.disabled = true;
                 addLeftButton.classList.add('btn-disabled');
             } else if (difference < -IMBALANCE_THRESHOLD) {
-                infoText.textContent = "Overwhelmed by emotion. It's time to add some logic!";
-                infoText.style.color = '#B91C1C';
+                statusIcon = '⚠️';
+                statusText = 'Emotion Overload - Add Logic';
+                statusColor = '#EF4444';
+                meterColor = 'linear-gradient(90deg, #EF4444, #F87171)';
                 addRightButton.disabled = true;
                 addRightButton.classList.add('btn-disabled');
             } else if (difference > 0) {
-                infoText.textContent = "Leaning towards Logic...";
-                infoText.style.color = '#F59E0B';
+                statusIcon = '📊';
+                statusText = 'Logic Dominant';
+                statusColor = '#F59E0B';
+                meterColor = 'linear-gradient(90deg, #F59E0B, #FBBF24)';
             } else if (difference < 0) {
-                infoText.textContent = "Leaning towards Emotion...";
-                infoText.style.color = '#3B82F6';
+                statusIcon = '💭';
+                statusText = 'Emotion Dominant';
+                statusColor = '#3B82F6';
+                meterColor = 'linear-gradient(90deg, #3B82F6, #60A5FA)';
             } else {
-                infoText.textContent = "Add weight to find the balance.";
-                infoText.style.color = '#4B5563';
+                statusIcon = '🎯';
+                statusText = 'Ready to Balance';
+                statusColor = '#6B7280';
+                meterColor = 'linear-gradient(90deg, #6B7280, #9CA3AF)';
             }
+            
+            infoText.innerHTML = `
+                <div class="result-display">
+                    <div class="status-indicator" style="color: ${statusColor}">
+                        <span>${statusIcon}</span>
+                        <span>${statusText}</span>
+                    </div>
+                    <div class="balance-meter">
+                        <div class="balance-fill" style="width: ${balancePercentage}%; background: ${meterColor};"></div>
+                    </div>
+                    <div class="result-stats">
+                        <span>Balance Score: ${balancePercentage}%</span>
+                        <span>Total Weights: ${total}</span>
+                    </div>
+                </div>
+            `;
         }
         
         // --- RESET FUNCTIONALITY ---
@@ -507,6 +702,29 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
+        // Modal event listeners
+        unmuteButton.addEventListener('click', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const playerName = urlParams.get('name') || 'Friend';
+            window.location.href = `thankyou.html?name=${playerName}`;
+        });
+        
+        copyCodeBtn.addEventListener('click', () => {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText.textContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            
+            copyPopup.classList.add('show');
+            setTimeout(() => {
+                copyPopup.classList.remove('show');
+            }, 2000);
+        });
+        
+        // Initialize the display
+        checkBalanceState();
         animate();
     </script>
 </body>
