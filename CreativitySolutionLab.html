@@ -8,13 +8,44 @@
         /* --- Core Setup --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #e0e6ec;
+            background: radial-gradient(ellipse at center, #0a0a0a, #1a0033, #2d1b69, #000000);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            position: relative;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: twinkle 4s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
         }
 
         /* --- Game UI: Title & Instructions --- */
@@ -23,9 +54,13 @@
             top: 8%;
             width: 100%;
             text-align: center;
-            font-size: 28px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
             font-weight: bold;
-            color: #333;
+            color: #00ffff;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(138, 43, 226, 0.6);
+            animation: cosmicGlow 3s ease-in-out infinite alternate;
+            z-index: 10;
         }
 
         #prompt-text {
@@ -33,14 +68,17 @@
             top: 15%;
             width: 100%;
             text-align: center;
-            font-size: 20px;
-            color: #555;
+            font-size: 22px;
+            color: #ecf0f1;
             transition: opacity 0.5s ease;
+            text-shadow: 0 0 15px rgba(52, 152, 219, 0.7);
+            z-index: 10;
         }
         
         .highlight {
             font-weight: bold;
-            color: #2c3e50;
+            color: #f39c12;
+            text-shadow: 0 0 20px rgba(243, 156, 18, 0.8);
         }
 
         #game-instructions {
@@ -48,8 +86,10 @@
             bottom: 5%;
             width: 100%;
             text-align: center;
-            font-size: 16px;
-            color: #6c757d;
+            font-size: 18px;
+            color: #bdc3c7;
+            text-shadow: 0 0 10px rgba(189, 195, 199, 0.5);
+            z-index: 10;
         }
 
         /* --- Modal Styling --- */
@@ -59,14 +99,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 100;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
         }
 
         .modal-overlay.visible {
@@ -75,104 +116,150 @@
         }
 
         .modal-content {
-            background: white;
-            padding: 30px 40px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 40px 50px;
+            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+            transform: scale(0.7) translateY(100px) rotateX(15deg);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
+            backdrop-filter: blur(20px);
+            perspective: 1000px;
         }
         
         .modal-overlay.visible .modal-content {
-            transform: scale(1);
+            transform: scale(1) translateY(0) rotateX(0deg);
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 25px;
+            pointer-events: none;
         }
 
         .modal-content p {
-            font-size: 22px;
-            color: #333;
-            margin: 0 0 20px 0;
+            font-size: 26px;
+            color: #ecf0f1;
+            margin: 0 0 30px 0;
+            text-shadow: 0 0 15px rgba(52, 152, 219, 0.6);
+            font-weight: 600;
         }
         
-        /* UPDATED: Styling for the new code display area */
+        /* --- Code Display Styling --- */
         .code-container {
-            background-color: #f0f2f5; /* A slightly different background */
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); /* Embossed effect */
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 4px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
         }
         
         .code-label {
-            font-size: 12px;
-            color: #6c757d;
-            letter-spacing: 1px;
+            font-size: 16px;
+            color: #3498db;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.6);
+            font-weight: 600;
         }
 
         .code-display {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 20px;
         }
 
         #code-text {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
-            color: #333;
-            letter-spacing: 3px;
+            color: #2ecc71;
+            letter-spacing: 5px;
             opacity: 0;
-            transition: opacity 0.5s ease 0.3s; /* Fade in after modal appears */
+            transition: opacity 0.8s ease 0.5s;
+            text-shadow: 0 0 20px rgba(46, 204, 113, 0.8);
+            animation: codeGlow 3s ease-in-out infinite alternate;
+            font-family: 'Courier New', monospace;
         }
         
         .modal-overlay.visible #code-text {
             opacity: 1;
         }
 
-        #copy-code-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
+        #copy-code-btn, #save-code-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-size: 22px;
             cursor: pointer;
-            padding: 5px;
+            padding: 12px 16px;
             line-height: 1;
-            color: #6c757d;
+            color: #ecf0f1;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #copy-code-btn:hover, #save-code-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
 
         #unmute-button {
-            background-color: #4CAF50;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            border: none;
-            padding: 12px 28px;
-            font-size: 18px;
-            border-radius: 8px;
+            padding: 18px 40px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 50px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         #unmute-button:hover {
-            background-color: #45a049;
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
         }
         
         #copy-popup {
             position: absolute;
-            bottom: -50px;
+            bottom: -70px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #2c3e50;
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.9), rgba(46, 204, 113, 0.9));
             color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
             opacity: 0;
-            transition: opacity 0.3s ease, bottom 0.3s ease;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         #copy-popup.show {
-            bottom: 20px;
+            bottom: -30px;
             opacity: 1;
         }
 
@@ -281,26 +368,44 @@
         @keyframes rainbow-anim { 0%, 100% { background-position: 0% 0%; } 50% { background-position: 0% 100%; } }
         @keyframes lava-lamp { 0%, 100% { bottom: -20%; border-radius: 50%; } 25% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; } 50% { bottom: 60%; height: 50%; width: 50%; } 75% { border-radius: 60% 40% 30% 70% / 70% 60% 40% 30%; } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes twinkle {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
+        }
+        @keyframes cosmicGlow {
+            from { text-shadow: 0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(138, 43, 226, 0.6); }
+            to { text-shadow: 0 0 40px rgba(0, 255, 255, 1), 0 0 80px rgba(138, 43, 226, 0.8), 0 0 120px rgba(255, 20, 147, 0.4); }
+        }
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes codeGlow {
+            from { text-shadow: 0 0 20px rgba(46, 204, 113, 0.8); }
+            to { text-shadow: 0 0 30px rgba(46, 204, 113, 1), 0 0 40px rgba(52, 152, 219, 0.6); }
+        }
     </style>
 </head>
 <body>
 
-<div id="game-title"><span id="player-name"></span>We create a Creativity Solution</div>
+<div id="game-title"><span id="player-name"></span>we build a creative voice formula today.</div>
 <div id="prompt-text"></div>
-<div id="game-instructions">Click the correct test tube to follow the recipe.</div>
+<div id="game-instructions">Speech is a Sacred Gift</div>
 
 <div id="end-game-modal" class="modal-overlay">
     <div class="modal-content">
-        <p>You have successfully created a creative solution! 🧪</p>
+        <p>🔊 Honest Voice Activation Successful.</p>
         <!-- UPDATED: New structure for the code display -->
         <div class="code-container">
             <div class="code-label">Code</div>
             <div class="code-display">
-                <span id="code-text">10 21 19 20</span>
-                <button id="copy-code-btn">📋</button>
+                <span id="code-text">09 14 06 09 14 09 20 05</span>
+                <button id="copy-code-btn">📋 Copy</button>
+                <button id="save-code-btn">💾 Save</button>
             </div>
         </div>
-        <button id="unmute-button">Unmute Sameer</button>
+        <button id="unmute-button">Hoe gaat het met u?</button>
         <div id="copy-popup">Copied to clipboard!</div>
     </div>
 </div>
@@ -341,14 +446,15 @@
     // UPDATED: Get the new code text span
     const codeText = document.getElementById('code-text');
     const copyCodeBtn = document.getElementById('copy-code-btn');
+    const saveCodeBtn = document.getElementById('save-code-btn');
     const copyPopup = document.getElementById('copy-popup');
 
     // --- GAME STATE ---
     const prompts = [
-        { text: "Add something '<span class=\"highlight\">Out of the blue</span>'", color: "blue" },
-        { text: "Now, add a spark of <span class=\"highlight\">Originality</span>", color: "originality" },
-        { text: "Followed by a spectrum of <span class=\"highlight\">Imagination</span>", color: "imagination" },
-        { text: "And finish with something truly <span class=\"highlight\">Unique</span>", color: "unique" }
+        { text: "Add which is '<span class=\"highlight\">Out of the Blue</span>'", color: "blue" },
+        { text: "Now, add <span class=\"highlight\">Sparks of Originality</span>", color: "originality" },
+        { text: "Followed by a <span class=\"highlight\">Spectrum of Imagination</span>", color: "imagination" },
+        { text: "Yes, add that something <span class=\"highlight\">Unusual</span>", color: "unique" }
     ];
     let currentPromptIndex = 0;
     let beakerLevel = 0;
@@ -456,6 +562,26 @@
         copyPopup.classList.add('show');
         setTimeout(() => {
             copyPopup.classList.remove('show');
+        }, 2000);
+    });
+
+    // Save as txt file functionality
+    saveCodeBtn.addEventListener('click', () => {
+        const code = codeText.textContent;
+        const blob = new Blob([code], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'creativity-code.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        // Change icon to download symbol
+        saveCodeBtn.innerHTML = '📥 Downloaded';
+        setTimeout(() => {
+            saveCodeBtn.innerHTML = '💾 Save';
         }, 2000);
     });
 

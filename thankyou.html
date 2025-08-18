@@ -85,12 +85,19 @@
             animation: fadeInUp 2s ease-out 0.5s forwards;
         }
 
+        .signature {
+            position: absolute;
+            bottom: 30px;
+            right: 120px;
+            text-align: right;
+            z-index: 3;
+        }
+
         .signature-center {
             font-family: 'Dancing Script', cursive;
             font-size: 18px;
             color: #95a5a6;
-            margin-top: 40px;
-            transform: rotate(-1deg);
+            transform: rotate(-8deg);
             animation: handwriting 1s ease-out 2s forwards;
             background: linear-gradient(to right, #95a5a6 0%, #95a5a6 50%, transparent 50%);
             background-size: 200% 100%;
@@ -105,7 +112,7 @@
             font-size: 36px;
             color: #95a5a6;
             margin-top: 15px;
-            transform: rotate(-1deg);
+            transform: rotate(-8deg);
             animation: handwriting 1.5s ease-out 2.5s forwards;
             background: linear-gradient(to right, #95a5a6 0%, #95a5a6 50%, transparent 50%);
             background-size: 200% 100%;
@@ -120,7 +127,7 @@
             font-size: 16px;
             color: #7f8c8d;
             margin-top: 5px;
-            transform: rotate(-1deg);
+            transform: rotate(-8deg);
             animation: handwriting 1s ease-out 4.2s forwards;
             background: linear-gradient(to right, #7f8c8d 0%, #7f8c8d 50%, transparent 50%);
             background-size: 200% 100%;
@@ -202,13 +209,16 @@
 
     <div class="container">
         <div class="thank-you-message">
-            <h1 class="main-title">Thank You <span id="user-name"></span></h1>
+            <h1 class="main-title">Nice to meet you <span id="user-name"></span></h1>
             <p class="subtitle">Looking forward to collaborating with you in Meaningful ways</p>
-            <div class="signature-center">Crafted with Innovation and Creativity</div>
-            <div class="signature-name">Sameer Goel</div>
-            <div class="date" id="current-date"></div>
-            <button class="upgrade-button" id="action-button">Let's upgrade superpowers</button>
+            <button class="upgrade-button" id="action-button">Explore Superpowers App</button>
         </div>
+    </div>
+
+    <div class="signature">
+        <div class="signature-center">Crafted with Innovation and Creativity</div>
+        <div class="signature-name">Sameer Goel</div>
+        <div class="date" id="current-date"></div>
     </div>
 
 
