@@ -249,6 +249,69 @@
         .game-btn:disabled:before {
             display: none;
         }
+        
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #1f2937, #374151);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px 40px;
+            text-align: center;
+            color: #ecf0f1;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 
+                0 0 60px rgba(16, 185, 129, 0.3),
+                0 25px 50px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-content h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(24px, 4vw, 32px);
+            color: #10B981;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .modal-content p {
+            font-size: clamp(16px, 3vw, 20px);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #D1D5DB;
+        }
+        
+        .modal-btn {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(16, 185, 129, 0.4);
+        }
     </style>
 </head>
 <body class="bg-gray-100 transition-colors duration-500">
@@ -256,20 +319,19 @@
     <!-- Container for the 3D scene -->
     <div id="scene-container"></div>
     
-    <!-- Explore Icon -->
-    <a href="https://www.sameerai.com" target="_blank" class="explore-icon">
-        <span>🧠</span>
-        <span>Explore digital consciousness</span>
-    </a>
-    
-    <!-- Thank You Button -->
-    <a href="thankyou.html" class="thank-you-btn">
-        <span>🙏</span>
-        <span>Thank You</span>
-    </a>
+
 
     <!-- Title Logo -->
-    <h1 class="title-standard">Mental Balance 🧠</h1>
+    <h1 class="title-standard">Mental Balance Gamified 🧠</h1>
+    <!-- Balance Achievement Modal -->
+    <div id="balance-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 id="modal-title">🎯 Superpower Unlocked!</h2>
+            <p id="modal-message">Balance of Cognitive powers with Emotional Intelligence is a Superpower.</p>
+            <button id="modal-continue" class="modal-btn">Continue Exploring</button>
+        </div>
+    </div>
+    
     <!-- UI Overlay for text and buttons -->
     <div class="ui-overlay">
         <!-- Center Section with Result Display -->
@@ -393,6 +455,11 @@
         const weightBlocks = [];
         const IMBALANCE_THRESHOLD = 1;
         let particles = null;
+        let balanceCount = 0;
+        
+        // Get user name from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const userName = urlParams.get('name');
 
         function addWeight(side) {
             const difference = leftWeightCount - rightWeightCount;
@@ -528,6 +595,20 @@
                 meterColor = 'linear-gradient(90deg, #10B981, #34D399)';
                 createParticles();
                 body.classList.add('bg-green-100');
+                
+                // Show modal on balance achievements
+                balanceCount++;
+                if (balanceCount === 1) {
+                    document.getElementById('modal-title').textContent = '🎯 Superpower Unlocked!';
+                    document.getElementById('modal-message').textContent = 'Balance of Cognitive powers with Emotional Intelligence is a Superpower.';
+                    document.getElementById('modal-continue').textContent = 'Continue Exploring';
+                    document.getElementById('balance-modal').style.display = 'flex';
+                } else if (balanceCount === 2) {
+                    document.getElementById('modal-title').textContent = '🧠 Inner Intelligence';
+                    document.getElementById('modal-message').textContent = 'Emotional Intelligence is directly linked with Inner Intelligence.';
+                    document.getElementById('modal-continue').textContent = 'Continue';
+                    document.getElementById('balance-modal').style.display = 'flex';
+                }
             } else if (difference > IMBALANCE_THRESHOLD) {
                 statusIcon = '⚠️';
                 statusText = 'Logic Overload - Add Emotion';
@@ -595,11 +676,23 @@
             
             checkBalanceState();
         }
+        
+        // --- MODAL FUNCTIONALITY ---
+        document.getElementById('modal-continue').addEventListener('click', () => {
+            if (balanceCount === 2) {
+                // Navigate to thank you page with user name
+                window.location.href = `thankyou.html?name=${userName}`;
+            } else {
+                document.getElementById('balance-modal').style.display = 'none';
+            }
+        });
 
         // --- EVENT LISTENERS FOR BUTTONS ---
         document.getElementById('add-left').addEventListener('click', () => addWeight('left'));
         document.getElementById('add-right').addEventListener('click', () => addWeight('right'));
         document.getElementById('reset-button').addEventListener('click', resetScene);
+        
+        // Modal event listener (already handled above)
 
         // --- MOUSE CONTROLS ---
         let isMouseDown = false;

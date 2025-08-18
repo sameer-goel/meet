@@ -59,12 +59,10 @@
             color: #ecf0f1;
             z-index: 2;
             position: relative;
-            animation: fadeIn 2s ease-out;
         }
 
         .thank-you-message {
             margin-bottom: 40px;
-            animation: slideDown 1.5s ease-out;
         }
 
         .main-title {
@@ -73,7 +71,6 @@
             color: #2ecc71;
             text-shadow: 0 0 30px rgba(46, 204, 113, 0.8);
             margin-bottom: 15px;
-            animation: glow 3s ease-in-out infinite alternate;
         }
 
         .subtitle {
@@ -82,7 +79,6 @@
             font-weight: 300;
             margin-bottom: 10px;
             opacity: 0;
-            animation: fadeInUp 2s ease-out 0.5s forwards;
         }
 
         .signature {
@@ -98,7 +94,6 @@
             font-size: 18px;
             color: #95a5a6;
             transform: rotate(-8deg);
-            animation: handwriting 1s ease-out 2s forwards;
             background: linear-gradient(to right, #95a5a6 0%, #95a5a6 50%, transparent 50%);
             background-size: 200% 100%;
             background-position: 100% 0;
@@ -113,7 +108,6 @@
             color: #95a5a6;
             margin-top: 15px;
             transform: rotate(-8deg);
-            animation: handwriting 1.5s ease-out 2.5s forwards;
             background: linear-gradient(to right, #95a5a6 0%, #95a5a6 50%, transparent 50%);
             background-size: 200% 100%;
             background-position: 100% 0;
@@ -128,7 +122,6 @@
             color: #7f8c8d;
             margin-top: 5px;
             transform: rotate(-8deg);
-            animation: handwriting 1s ease-out 4.2s forwards;
             background: linear-gradient(to right, #7f8c8d 0%, #7f8c8d 50%, transparent 50%);
             background-size: 200% 100%;
             background-position: 100% 0;
@@ -150,7 +143,6 @@
             transition: all 0.3s ease;
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
             opacity: 0;
-            animation: fadeInUp 1s ease-out 5.5s forwards;
         }
 
         .upgrade-button:hover {
@@ -192,44 +184,373 @@
             }
         }
 
+        /* Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #1a1a2e, #16213e, #0f3460);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-overlay::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .modal-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .modal-particles .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.8) 0%, rgba(138, 43, 226, 0.4) 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.6);
+        }
+
+        .main-content {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .main-content.visible .container {
+            animation: fadeIn 2s ease-out;
+        }
+
+        .main-content.visible .thank-you-message {
+            animation: slideDown 1.5s ease-out;
+        }
+
+        .main-content.visible .main-title {
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        .main-content.visible .subtitle {
+            animation: fadeInUp 2s ease-out 0.5s forwards;
+        }
+
+        .main-content.visible .signature-center {
+            animation: handwriting 1s ease-out 2s forwards;
+        }
+
+        .main-content.visible .signature-name {
+            animation: handwriting 1.5s ease-out 2.5s forwards;
+        }
+
+        .main-content.visible .date {
+            animation: handwriting 1s ease-out 4.2s forwards;
+        }
+
+        .main-content.visible .upgrade-button {
+            animation: fadeInUp 1s ease-out 5.5s forwards;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px 40px;
+            text-align: center;
+            color: #ecf0f1;
+            z-index: 2;
+            position: relative;
+            box-shadow: 
+                0 0 60px rgba(52, 152, 219, 0.2),
+                0 0 120px rgba(138, 43, 226, 0.1),
+                0 25px 50px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                rgba(52, 152, 219, 0.3) 0%, 
+                rgba(138, 43, 226, 0.3) 25%, 
+                rgba(46, 204, 113, 0.3) 50%, 
+                rgba(138, 43, 226, 0.3) 75%, 
+                rgba(52, 152, 219, 0.3) 100%);
+            border-radius: 32px;
+            z-index: -1;
+
+            background-size: 400% 400%;
+        }
+
+        .modal-content p {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(28px, 5vw, 42px);
+            color: #2ecc71;
+            text-shadow: 
+                0 0 20px rgba(46, 204, 113, 0.8),
+                0 0 40px rgba(46, 204, 113, 0.4);
+            margin-bottom: 35px;
+
+        }
+
+        .code-container {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(46, 204, 113, 0.1), transparent);
+
+        }
+
+        .code-label {
+            font-size: clamp(12px, 2.5vw, 16px);
+            color: #bdc3c7;
+            font-weight: 300;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .code-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #code-text {
+            font-size: clamp(20px, 4vw, 28px);
+            font-weight: bold;
+            color: #2ecc71;
+            letter-spacing: 4px;
+            text-shadow: 
+                0 0 10px rgba(46, 204, 113, 1),
+                0 0 20px rgba(46, 204, 113, 0.8),
+                0 0 30px rgba(46, 204, 113, 0.4);
+            font-family: 'Courier New', monospace;
+
+        }
+
+        #copy-code-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(52, 152, 219, 0.4);
+            color: #52a9ff;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.2);
+        }
+
+        #copy-code-btn:hover {
+            background: rgba(52, 152, 219, 0.2);
+            border-color: rgba(52, 152, 219, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(52, 152, 219, 0.4);
+        }
+
+        #continue-btn, #close-modal {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 43, 226, 0.4);
+            color: white;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.2);
+            margin: 0 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #continue-btn::before, #close-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        #continue-btn:hover, #close-modal:hover {
+            background: rgba(138, 43, 226, 0.2);
+            border-color: rgba(138, 43, 226, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.4);
+        }
+
+        #continue-btn:hover::before, #close-modal:hover::before {
+            left: 100%;
+        }
+
+        #close-modal {
+            padding: 15px 20px;
+            font-size: 18px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
 
 
 
     </style>
 </head>
 <body>
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
+    <div id="code-modal" class="modal-overlay">
+        <div class="modal-particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+            <div class="particle" style="left: 80%; animation-delay: 4s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 5s;"></div>
+        </div>
+        <div class="modal-content">
+            <p id="modal-title">🔊 Honest Voice Activation Successful.</p>
+            <div class="code-container">
+                <div class="code-label">◦ Cosmic Access Code ◦</div>
+                <div class="code-display">
+                    <span id="code-text"></span>
+                    <button id="copy-code-btn">✨ Copy</button>
+                </div>
+            </div>
+            <div class="modal-buttons" style="display: none;">
+                <button id="continue-btn">Continue</button>
+                <button id="close-modal">✕</button>
+            </div>
+        </div>
     </div>
+    <div class="main-content">
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
 
-    <div class="container">
-        <div class="thank-you-message">
-            <h1 class="main-title">Nice to meet you <span id="user-name"></span></h1>
-            <p class="subtitle">Looking forward to collaborating with you in Meaningful ways</p>
-            <button class="upgrade-button" id="action-button">Explore Superpowers App</button>
+        <div class="container">
+            <div class="thank-you-message">
+                <h1 class="main-title">Nice to meet you <span id="user-name"></span></h1>
+                <p class="subtitle">Looking forward to collaborating with you in Meaningful ways</p>
+                <button class="upgrade-button" id="action-button">Explore Superpowers App</button>
+            </div>
+        </div>
+
+        <div class="signature">
+            <div class="signature-center">Crafted with Innovation and Creativity</div>
+            <div class="signature-name">Sameer Goel</div>
+            <div class="date" id="current-date"></div>
         </div>
     </div>
 
-    <div class="signature">
-        <div class="signature-center">Crafted with Innovation and Creativity</div>
-        <div class="signature-name">Sameer Goel</div>
-        <div class="date" id="current-date"></div>
-    </div>
 
-
-
+    <script src="../codemeta.js"></script>
     <script>
         // Get name from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const userName = urlParams.get('name');
+        
+        // Show modal with user's code
+        const modal = document.getElementById('code-modal');
+        const codeText = document.getElementById('code-text');
+        const copyBtn = document.getElementById('copy-code-btn');
+        const continueBtn = document.getElementById('continue-btn');
+        
         if (userName) {
-            document.getElementById('user-name').textContent = userName;
+            const userData = getUserData(userName);
+            codeText.textContent = getCodeForUser(userName);
+            if (userData && userData.modaltitle) {
+                document.getElementById('modal-title').textContent = `🔊 ${userData.modaltitle}.`;
+            }
+            // Set user-specific button text and link
+            if (userData && userData.redirectbutton && userData.redirectlink) {
+                document.getElementById('action-button').textContent = userData.redirectbutton;
+                document.getElementById('action-button').onclick = () => window.open(userData.redirectlink, '_blank');
+            }
         }
+        
+        // Copy functionality - now dismisses modal
+        copyBtn.addEventListener('click', () => {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeText.textContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            copyBtn.innerHTML = '✅ Copied';
+            
+            // Dismiss modal after copying
+            setTimeout(() => {
+                showMainContent();
+            }, 1000);
+        });
+        
+        // Continue to main content
+        function showMainContent() {
+            modal.style.display = 'none';
+            document.querySelector('.main-content').classList.add('visible');
+            if (userName) {
+                document.getElementById('user-name').textContent = userName;
+            }
+        }
+        
+        continueBtn.addEventListener('click', showMainContent);
+        document.getElementById('close-modal').addEventListener('click', showMainContent);
 
         // Set current date
         const currentDate = new Date().toLocaleDateString('en-US', {
@@ -239,14 +560,7 @@
         });
         document.getElementById('current-date').textContent = currentDate;
         
-        // Set button text and action based on user
-        const actionButton = document.getElementById('action-button');
-        if (userName === 'Falco') {
-            actionButton.textContent = 'Explore Digital Consciousness';
-            actionButton.onclick = () => window.open('https://www.sameerai.com', '_blank');
-        } else {
-            actionButton.onclick = () => window.open('https://updatemind.space/', '_blank');
-        }
+
     </script>
 </body>
 </html>

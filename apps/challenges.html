@@ -3,213 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strategic Challenges</title>
+    <title>Email - Strategic Challenges Request</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600&display=swap');
         
         body {
-            font-family: 'Inter', sans-serif;
-            background: radial-gradient(ellipse at center, #0a0a0a, #1a0033, #2d1b69, #000000);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f3f2f1;
             margin: 0;
-            overflow-x: hidden;
-            position: relative;
             padding: 20px;
+            color: #323130;
         }
 
-        body::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
-                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(2px 2px at 160px 30px, #fff, transparent);
-            background-repeat: repeat;
-            background-size: 200px 100px;
-            animation: twinkle 4s ease-in-out infinite alternate;
-            pointer-events: none;
+        .email-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,0.3) 100%);
-            pointer-events: none;
+        .email-header {
+            background: #0078d4;
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            padding: 40px;
-            max-width: 900px;
-            width: 100%;
-            backdrop-filter: blur(20px);
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            z-index: 10;
-            position: relative;
+        .email-icon {
+            font-size: 24px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .main-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: clamp(32px, 6vw, 48px);
-            color: #00ffff;
-            text-shadow: 0 0 30px rgba(0, 255, 255, 0.8);
-            margin-bottom: 15px;
-            animation: cosmicGlow 3s ease-in-out infinite alternate;
-        }
-
-        .subtitle {
+        .email-title {
             font-size: 18px;
-            color: #bdc3c7;
+            font-weight: 600;
+        }
+
+        .email-meta {
+            background: #faf9f8;
+            padding: 20px 25px;
+            border-bottom: 1px solid #edebe9;
+        }
+
+        .meta-row {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .meta-label {
+            font-weight: 600;
+            width: 80px;
+            color: #605e5c;
+        }
+
+        .meta-value {
+            color: #323130;
+        }
+
+        .recipient {
+            color: #0078d4;
+            text-decoration: none;
+        }
+
+        .recipient:hover {
+            text-decoration: underline;
+        }
+
+        .email-body {
+            padding: 30px 25px;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .greeting {
             margin-bottom: 20px;
+            font-weight: 600;
         }
 
-        .thank-you {
-            font-size: 16px;
-            color: #95a5a6;
-            font-style: italic;
+        .paragraph {
+            margin-bottom: 18px;
         }
 
-        .challenges-grid {
-            display: grid;
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .challenge-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 25px;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .challenge-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-5px);
+        .challenge-section {
+            background: #f8f9fa;
+            border-left: 4px solid #0078d4;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
         }
 
         .challenge-title {
-            font-size: 20px;
             font-weight: 600;
-            color: #2ecc71;
-            margin-bottom: 15px;
-            text-shadow: 0 0 15px rgba(46, 204, 113, 0.6);
-        }
-
-        .challenge-description {
-            font-size: 16px;
-            color: #ecf0f1;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .challenge-goal {
-            font-size: 14px;
-            color: #f39c12;
-            font-weight: 500;
-            padding: 10px 15px;
-            background: rgba(243, 156, 18, 0.1);
-            border-radius: 8px;
-            border-left: 3px solid #f39c12;
-        }
-
-        .assignee {
-            display: inline-block;
-            background: rgba(52, 152, 219, 0.2);
-            color: #3498db;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            color: #0078d4;
             margin-bottom: 10px;
+            font-size: 16px;
         }
 
-        @keyframes twinkle {
-            from { opacity: 0.3; }
-            to { opacity: 1; }
+        .challenge-text {
+            margin-bottom: 12px;
         }
 
-        @keyframes cosmicGlow {
-            from { text-shadow: 0 0 30px rgba(0, 255, 255, 0.8); }
-            to { text-shadow: 0 0 40px rgba(0, 255, 255, 1), 0 0 60px rgba(138, 43, 226, 0.6); }
+        .goal-text {
+            font-style: italic;
+            color: #605e5c;
+            font-size: 14px;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #edebe9;
+        }
+
+        .signature {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #edebe9;
+        }
+
+        .signature-line {
+            margin-bottom: 5px;
+        }
+
+        .signature-name {
+            font-weight: 600;
+            color: #0078d4;
+        }
+
+        .email-actions {
+            background: #faf9f8;
+            padding: 15px 25px;
+            border-top: 1px solid #edebe9;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: 1px solid #8a8886;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #f3f2f1;
+        }
+
+        .action-btn.primary {
+            background: #0078d4;
+            color: white;
+            border-color: #0078d4;
+        }
+
+        .action-btn.primary:hover {
+            background: #106ebe;
+        }
+
+        .timestamp {
+            color: #605e5c;
+            font-size: 12px;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1 class="main-title">Strategic Challenges</h1>
-            <p class="subtitle">Innovation & Problem-Solving Framework</p>
-            <p class="thank-you">Thank you Meriem Jirari, Aram Smith for the collaborative meeting</p>
+    <div class="email-container">
+        <div class="email-header">
+            <span class="email-icon">📧</span>
+            <span class="email-title">Strategic Challenges Request</span>
         </div>
 
-        <div class="challenges-grid">
-            <div class="challenge-card">
-                <div class="assignee">Request to Aram Smith</div>
-                <h3 class="challenge-title">🎯 Most Difficult Organizational Challenge</h3>
-                <p class="challenge-description">
-                    I request Aram Smith to offer me the most difficult challenge of the organization.
-                </p>
-                <div class="challenge-goal">
-                    <strong>Goal:</strong> Find unique ways to solve that challenge through innovative approaches and strategic thinking.
+        <div class="email-meta">
+            <div class="meta-row">
+                <span class="meta-label">From:</span>
+                <span class="meta-value">Sameer Goel &lt;sameer.goel@outlook.com&gt;</span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-label">To:</span>
+                <span class="meta-value">
+                    <a href="#" class="recipient">Meriem Jirari</a>; 
+                    <a href="#" class="recipient">Aram Smith</a>; 
+                    <a href="#" class="recipient">Cem Kubilay</a>
+                </span>
+            </div>
+            <div class="meta-row">
+                <span class="meta-label">Subject:</span>
+                <span class="meta-value">Request for Strategic Challenges - Innovation & Problem-Solving</span>
+            </div>
+            <div class="timestamp">Sent: Today, 2:30 PM</div>
+        </div>
+
+        <div class="email-body">
+            <div class="greeting">Dear Meriem, Aram, and Cem,</div>
+            
+            <div class="paragraph">
+                First, I want to sincerely thank you for the time and energy you gave me during our meeting. I deeply value the opportunity to learn from you and to be challenged by you.
+            </div>
+
+            <div class="paragraph">
+                As part of this journey, I would like to put forward a request — to not only be interviewed, but also to be challenged:
+            </div>
+
+            <div class="challenge-section">
+                <div class="challenge-title">To Meriem Jirari:</div>
+                <div class="challenge-text">
+                    I request you to bring me a challenge around upskilling employees both technically and emotionally. Especially during these times of growing mental health and job loss fear.
+                </div>
+                <div class="goal-text">
+                    → My goal is to come up with a unique upskilling plan to save talent loss.
                 </div>
             </div>
 
-            <div class="challenge-card">
-                <div class="assignee">Request to Meriem</div>
-                <h3 class="challenge-title">📚 Employee Upskilling Challenge</h3>
-                <p class="challenge-description">
-                    I request Meriem to find a challenge in upskilling employees technically and emotionally.
-                </p>
-                <div class="challenge-goal">
-                    <strong>Goal:</strong> Submit a fully researched strategy to improve talent retention and reduce talent loss.
+            <div class="challenge-section">
+                <div class="challenge-title">To Aram Smith:</div>
+                <div class="challenge-text">
+                    I request you to give me the most difficult challenge of the AI Innovation at Microsoft.
+                </div>
+                <div class="goal-text">
+                    → My goal is to find unique, out-of-the-box ways to solve it.
                 </div>
             </div>
 
-            <div class="challenge-card">
-                <div class="assignee">Request to Aram Smith</div>
-                <h3 class="challenge-title">🤖 Personalized Agentic AI for Executives</h3>
-                <p class="challenge-description">
-                    I request Aram Smith to ask me to make a personalized Agentic AI app that helps top executives be more productive.
-                </p>
-                <div class="challenge-goal">
-                    <strong>Goal:</strong> Understand how CTO can be on top of AI Innovation strategy and executive productivity enhancement.
+            <div class="challenge-section">
+                <div class="challenge-title">To Cem Kubilay:</div>
+                <div class="challenge-text">
+                    I request you to ask me to design a personalized Agentic AI app that empowers top executives to stay productive.
+                </div>
+                <div class="goal-text">
+                    → My goal is to develop a prototype of AI Agentic app that is used daily by CTO.
                 </div>
             </div>
 
-            <div class="challenge-card">
-                <div class="assignee">Innovation Challenge</div>
-                <h3 class="challenge-title">💡 New Microsoft App Ideas</h3>
-                <p class="challenge-description">
-                    Find new APP ideas that Microsoft can create, additionally new App features for existing apps.
-                </p>
-                <div class="challenge-goal">
-                    <strong>Goal:</strong> Develop innovative app concepts and feature enhancements that align with Microsoft's strategic vision and market needs.
+            <div class="challenge-section">
+                <div class="challenge-title">Additional Challenge:</div>
+                <div class="challenge-text">
+                    I also challenge myself to imagine new Microsoft apps for the future, along with new features for existing apps that can create more value for users.
+                </div>
+                <div class="goal-text">
+                    For me, it's about solving real problems with a unique disruptive approach.
                 </div>
             </div>
+
+            <div class="signature">
+                <div class="signature-line">With Warm Gratitude,</div>
+                <div class="signature-line signature-name">Sameer</div>
+            </div>
+        </div>
+
+        <div class="email-actions">
+            <button class="action-btn primary">Reply</button>
+            <button class="action-btn">Reply All</button>
+            <button class="action-btn">Forward</button>
+            <button class="action-btn">Archive</button>
         </div>
     </div>
 </body>

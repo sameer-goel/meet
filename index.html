@@ -354,27 +354,8 @@
             <p class="personal-note">Specially Designed for Our Meet</p>
         </div>
         
-        <div class="profiles-container">
-            <div class="profile" onclick="window.location.href='apps/CreativitySolutionLab.html?name=Meriem'">
-                <div class="profile-image">
-                    <span class="overlay-name">Meriem Jirari</span>
-                    <img src="assets/images/animatedlogo1.gif" class="hover-gif" alt="Animated Logo">
-                </div>
-            </div>
-            
-            <div class="profile" onclick="window.location.href='apps/LeftBrainRightBrain.html?name=Aram'">
-                <div class="profile-image">
-                    <span class="overlay-name">Aram Smith</span>
-                    <img src="assets/images/animatedlogo2.gif" class="hover-gif" alt="Animated Logo">
-                </div>
-            </div>
-            
-            <div class="profile">
-                <div class="profile-image">
-                    <span class="overlay-name">Cem Kubilay</span>
-                    <img src="assets/images/animatedlogo3.gif" class="hover-gif" alt="Animated Logo">
-                </div>
-            </div>
+        <div class="profiles-container" id="profiles-container">
+            <!-- Profiles will be loaded dynamically -->
         </div>
 
 
@@ -386,6 +367,30 @@
         ✨ With an intention of deeper and meaning collaboration with you. ✨ Crafted with Innovation and Creativity ✨
     </div>
     
+    <script src="codemeta.js"></script>
+    <script>
+        // Load profiles dynamically from metadata
+        const profilesContainer = document.getElementById('profiles-container');
+        const users = getAllUsers();
+        
+        users.forEach((user, index) => {
+            const profileDiv = document.createElement('div');
+            profileDiv.className = 'profile';
+            
+            if (user.app !== '#') {
+                profileDiv.onclick = () => window.location.href = `apps/${user.app}?name=${user.key}`;
+            }
+            
+            profileDiv.innerHTML = `
+                <div class="profile-image">
+                    <span class="overlay-name">${user.fullName}</span>
+                    <img src="assets/images/animatedlogo${index + 1}.gif" class="hover-gif" alt="Animated Logo">
+                </div>
+            `;
+            
+            profilesContainer.appendChild(profileDiv);
+        });
+    </script>
 
 </body>
 </html>

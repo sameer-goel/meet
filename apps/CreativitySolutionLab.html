@@ -395,18 +395,8 @@
 
 <div id="end-game-modal" class="modal-overlay">
     <div class="modal-content">
-        <p>🔊 Honest Voice Activation Successful.</p>
-        <!-- UPDATED: New structure for the code display -->
-        <div class="code-container">
-            <div class="code-label">Code</div>
-            <div class="code-display">
-                <span id="code-text">09 14 06 09 14 09 20 05</span>
-                <button id="copy-code-btn">📋 Copy</button>
-                <button id="save-code-btn">💾 Save</button>
-            </div>
-        </div>
-        <button id="unmute-button">Hoe gaat het met u?</button>
-        <div id="copy-popup">Copied to clipboard!</div>
+        <p>Hi <span id="modal-name"></span>, Hoe gaat het met u?</p>
+        <button id="unmute-button">Continue</button>
     </div>
 </div>
 
@@ -435,6 +425,7 @@
     </div></div>
 </div>
 
+<script src="../codemeta.js"></script>
 <script>
     // --- SETUP ---
     const testTubes = document.querySelectorAll('.test-tube-container');
@@ -536,6 +527,7 @@
     const playerName = urlParams.get('name');
     if (playerName) {
         document.getElementById('player-name').textContent = playerName + ', ';
+        document.getElementById('modal-name').textContent = playerName;
     }
     
     displayCurrentPrompt();
