@@ -1,5 +1,6 @@
 # Sensitive metadata files
 codemeta.js
+meta_problemsolver.txt
 
 # Development files
 *.log
