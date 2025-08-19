@@ -23,10 +23,10 @@ const userMeta = {
         modaltitle: "Agentic AI Deployed",
         fullName: "Cem Kubilay",
         code: "21 14 09 17 21 05 14 05",
-        app: "pagethankyou.html",
-        redirectbutton: "Review Book",
+        app: "futureAI.html",
+        redirectbutton: "SameerAI Research",
         redirectlink: "https://sameerai.com/pages/research.html",
-        redirectbutton2: "Review Research",
+        redirectbutton2: "Sameerai Developements",
         redirectlink2: "https://sameerai.com/pages/development.html"
     }
 };

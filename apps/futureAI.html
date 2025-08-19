@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future AI Applications - Vertical Layout</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .image-item {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-item img {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .back-button {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .scroll-indicator {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 8px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+        
+        .scroll-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .scroll-dot.active {
+            background: #00ffff;
+            box-shadow: 0 0 10px #00ffff;
+        }
+        
+
+        
+        .continue-section {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f0f23, #1a1a2e);
+        }
+        
+        .continue-button {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border: none;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+        
+        .continue-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 255, 255, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                right: 15px;
+            }
+            
+
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="scroll-indicator" id="scroll-indicator">
+        <!-- Dots will be generated dynamically -->
+    </div>
+    
+    <div class="container" id="container">
+        <!-- Images will be loaded dynamically -->
+    </div>
+    
+    <script>
+        // Create vertical layout
+        const container = document.getElementById('container');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        
+        for (let i = 1; i <= 8; i++) {
+            // Create image item
+            const imageItem = document.createElement('div');
+            imageItem.className = 'image-item';
+            
+            imageItem.innerHTML = `
+                <img src="../assets/futureApplicationImage/${i}.png" alt="Future AI Application ${i}" loading="lazy">
+            `;
+            container.appendChild(imageItem);
+            
+            // Create scroll dot
+            const dot = document.createElement('div');
+            dot.className = 'scroll-dot';
+            dot.dataset.index = i - 1;
+            scrollIndicator.appendChild(dot);
+        }
+        
+        // Add continue section after last slide
+        const continueSection = document.createElement('div');
+        continueSection.className = 'continue-section';
+        continueSection.innerHTML = `
+            <button class="continue-button" onclick="goToThankYou()">Continue</button>
+        `;
+        container.appendChild(continueSection);
+        
+        // Add continue dot
+        const continueDot = document.createElement('div');
+        continueDot.className = 'scroll-dot';
+        continueDot.dataset.index = 8;
+        scrollIndicator.appendChild(continueDot);
+        
+        function goToThankYou() {
+            // Get user name from URL or use default
+            const urlParams = new URLSearchParams(window.location.search);
+            const userName = urlParams.get('name') || 'Guest';
+            window.location.href = `thankyou.html?name=${userName}`;
+        }
+        
+        // Scroll indicator functionality
+        const dots = document.querySelectorAll('.scroll-dot');
+        const images = document.querySelectorAll('.image-item');
+        const allSections = [...images, continueSection];
+        
+        function updateScrollIndicator() {
+            const scrollTop = window.pageYOffset;
+            const windowHeight = window.innerHeight;
+            
+            allSections.forEach((section, index) => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.offsetHeight;
+                
+                if (scrollTop >= sectionTop - windowHeight / 2 && 
+                    scrollTop < sectionTop + sectionHeight - windowHeight / 2) {
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    if (dots[index]) dots[index].classList.add('active');
+                }
+            });
+        }
+        
+        // Smooth scroll to section when dot is clicked
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                if (allSections[index]) {
+                    allSections[index].scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            });
+        });
+        
+        // Update indicator on scroll
+        window.addEventListener('scroll', updateScrollIndicator);
+        
+        // Initialize
+        updateScrollIndicator();
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentActive = document.querySelector('.scroll-dot.active');
+            const currentIndex = currentActive ? parseInt(currentActive.dataset.index) : 0;
+            
+            if (e.key === 'ArrowDown' && currentIndex < allSections.length - 1) {
+                e.preventDefault();
+                allSections[currentIndex + 1].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            } else if (e.key === 'ArrowUp' && currentIndex > 0) {
+                e.preventDefault();
+                allSections[currentIndex - 1].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

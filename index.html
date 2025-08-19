@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creativity Solution Lab</title>
+    <title>Magical Experience</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;600&display=swap');
         
@@ -271,6 +271,21 @@
             text-shadow: 0 0 25px rgba(243, 156, 18, 0.8);
         }
 
+        .welcome-message {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 18px;
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
 
 
         .footer {
@@ -349,8 +364,8 @@
 
     <div class="container">
         <div class="invitation-header">
-            <h1 class="main-title">Welcome to Universe of Infinite Possibilities</h1>
-            <p class="subtitle">Manifestation of Our Imagination</p>
+            <h1 class="main-title">Experience the Universe of Infinite Possibilities</h1>
+            <p class="subtitle">Manifestations of Our Imaginations</p>
             <p class="personal-note">Specially Designed for Our Meet</p>
         </div>
         
@@ -377,16 +392,34 @@
             const profileDiv = document.createElement('div');
             profileDiv.className = 'profile';
             
-            if (user.app !== '#') {
-                profileDiv.onclick = () => window.location.href = `apps/${user.app}?name=${user.key}`;
-            }
-            
             profileDiv.innerHTML = `
                 <div class="profile-image">
                     <span class="overlay-name">${user.fullName}</span>
                     <img src="assets/images/animatedlogo${index + 1}.gif" class="hover-gif" alt="Animated Logo">
                 </div>
+                <div class="welcome-message">Welcome ${user.fullName}</div>
             `;
+            
+            // Add hover events for welcome message
+            const welcomeMsg = profileDiv.querySelector('.welcome-message');
+            profileDiv.addEventListener('mouseenter', () => {
+                welcomeMsg.style.opacity = '1';
+            });
+            
+            profileDiv.addEventListener('mouseleave', () => {
+                welcomeMsg.style.opacity = '0';
+            });
+            
+            // Handle different app types
+            if (user.app !== '#') {
+                if (user.app.startsWith('http')) {
+                    profileDiv.onclick = () => window.open(user.app, '_blank');
+                } else if (user.app === 'pagethankyou.html') {
+                    profileDiv.onclick = () => window.location.href = `apps/thankyou.html?name=${user.key}`;
+                } else {
+                    profileDiv.onclick = () => window.location.href = `apps/${user.app}?name=${user.key}`;
+                }
+            }
             
             profilesContainer.appendChild(profileDiv);
         });

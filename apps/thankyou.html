@@ -311,14 +311,12 @@
         }
 
         .modal-content p {
-            font-family: 'Dancing Script', cursive;
+            font-family: 'Courier New', monospace;
             font-size: clamp(28px, 5vw, 42px);
             color: #2ecc71;
-            text-shadow: 
-                0 0 20px rgba(46, 204, 113, 0.8),
-                0 0 40px rgba(46, 204, 113, 0.4);
+            font-weight: bold;
+            letter-spacing: 1px;
             margin-bottom: 35px;
-
         }
 
         .code-container {
@@ -459,9 +457,9 @@
             <div class="particle" style="left: 90%; animation-delay: 5s;"></div>
         </div>
         <div class="modal-content">
-            <p id="modal-title">🔊 Honest Voice Activation Successful.</p>
+            <p id="modal-title"></p>
             <div class="code-container">
-                <div class="code-label">◦ Cosmic Access Code ◦</div>
+                <div class="code-label">◦ Copy your Access Code ◦</div>
                 <div class="code-display">
                     <span id="code-text"></span>
                     <button id="copy-code-btn">✨ Copy</button>
@@ -515,12 +513,24 @@
             const userData = getUserData(userName);
             codeText.textContent = getCodeForUser(userName);
             if (userData && userData.modaltitle) {
-                document.getElementById('modal-title').textContent = `🔊 ${userData.modaltitle}.`;
+                document.getElementById('modal-title').textContent = userData.modaltitle;
+            } else {
+                document.getElementById('modal-title').textContent = 'Access Granted';
             }
             // Set user-specific button text and link
             if (userData && userData.redirectbutton && userData.redirectlink) {
                 document.getElementById('action-button').textContent = userData.redirectbutton;
                 document.getElementById('action-button').onclick = () => window.open(userData.redirectlink, '_blank');
+            }
+            
+            // Add second button if available
+            if (userData && userData.redirectbutton2 && userData.redirectlink2) {
+                const secondButton = document.createElement('button');
+                secondButton.className = 'upgrade-button';
+                secondButton.textContent = userData.redirectbutton2;
+                secondButton.style.marginTop = '20px';
+                secondButton.onclick = () => window.open(userData.redirectlink2, '_blank');
+                document.querySelector('.thank-you-message').appendChild(secondButton);
             }
         }
         

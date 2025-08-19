@@ -9,6 +9,7 @@ A personalized interactive experience featuring cosmic-themed games and dynamic 
 
 ### 🎨 **Meriem Jirari**
 - **Experience**: [Creativity Solution Lab](apps/CreativitySolutionLab.html?name=Meriem)
+- **Achievement**: Voice Activation Success
 - **Next Journey**: [Explore Superpowers App](https://updatemind.space/)
 - **Thank You Page**: [Personal Thank You](apps/thankyou.html?name=Meriem)
 
@@ -19,8 +20,9 @@ A personalized interactive experience featuring cosmic-themed games and dynamic 
 - **Thank You Page**: [Personal Thank You](apps/thankyou.html?name=Aram)
 
 ### 🤖 **Cem Kubilay**
-- **Experience**: [Agentic AI Development](https://sameerai.com/pages/dev.html)
-- **Next Journey**: [Review Book](https://updatemind.space/bookreader.html)
+- **Experience**: [Future AI Applications](apps/futureai.html?name=Cem)
+- **Achievement**: Agentic AI Deployed
+- **Next Journey**: [Review Book](https://sameerai.com/pages/research.html)
 - **Thank You Page**: [Personal Thank You](apps/thankyou.html?name=Cem)
 
 **Crafted with Innovation and Creativity**  
